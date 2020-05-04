@@ -35,5 +35,73 @@ public class PowerOutageDAO {
 		return nercList;
 	}
 	
+	public List<PowerOutage> getPowerOutageInNERC(Nerc nerc){
 
+		String sql = "SELECT id,customers_affected,date_event_began,date_event_finished FROM poweroutages WHERE nerc_id=?"
+				+ " ORDER BY date_event_began";
+		List<PowerOutage> POList = new ArrayList<>();
+
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, nerc.getId());
+			ResultSet res = st.executeQuery();
+
+			while (res.next()) {
+				PowerOutage po= new PowerOutage(res.getInt("id"),res.getInt("customers_affected"), res.getTimestamp("date_event_began").toLocalDateTime(),
+						 res.getTimestamp("date_event_finished").toLocalDateTime());
+				POList.add(po);
+			}
+
+			conn.close();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		return POList;
+	
+	}
+	public int getMaxYear() {
+		int result=0;
+		String sql="SELECT Max( date_event_began ) as max FROM poweroutages ";
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+		
+			ResultSet res = st.executeQuery();
+
+			if(res.next()) {
+				result=res.getTimestamp("max").toLocalDateTime().getYear();
+			}
+
+			conn.close();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		return result;
+	}
+	public int getMinYear() {
+		int result=0;
+		String sql="SELECT Min( date_event_began ) as min FROM poweroutages ";
+		try {
+			Connection conn = ConnectDB.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+		
+			ResultSet res = st.executeQuery();
+
+			if(res.next()) {
+				result=res.getTimestamp("min").toLocalDateTime().getYear();
+			}
+
+			conn.close();
+
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+
+		return result;
+	}
 }

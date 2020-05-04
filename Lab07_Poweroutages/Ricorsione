@@ -1,0 +1,7 @@
+Livello: blackout aggiunto
+Sol parziale: insieme di blackout
+Sol parziale completa se somma delle ore <= Y e la differenza tra l'anno più recente e quello più vecchio è <=X 
+Sol parziale è valida fino a quando il numero di persone coinvolte è > di tutte le altre soluzioni avute prima ???
+Sol completa è valida se è massimizzato il numero di persone coinvolte
+Regola: aggiungo nuovo blackout in modo di non superare X e Y ma massimizzando le persone coinvolte
+Struttura dati: ArrayList<PowerOuntage>
